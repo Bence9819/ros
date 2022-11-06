@@ -13,18 +13,23 @@ def main ():
     request = SetBoolByIndexSrvRequest()
     request.index = 0
     request.value = True
+    
     response = service.call(
         request
     )
-    
+    rospy.loginfo(request.value)
+
     def callback_input_data (msg):
         my_array = msg.values
         x = my_array[0]
+        #rospy.loginfo(x)
         if x == True:
             request.value = False
             rospy.loginfo("igaz")
             rospy.loginfo(request.value)
-            service.call
+        if x == False:
+            request.value = True
+            rospy.loginfo("hamis")   
 
 
 
@@ -37,25 +42,11 @@ def main ():
 
 
     #rospy.loginfo(response)
-    rospy.loginfo(request.value)
-    
-
-
-
-        
-            
-
-
-    
-
-
     
     
-
 
 
 
 if __name__== '__main__':
     main()
     rospy.spin()
-    
