@@ -29,9 +29,15 @@ def buttonLightOff ():
 
 def buttonLightState ():
     buttonOneLightStateService = rospy.ServiceProxy('/module_services/module_1/digital_outputs/get_channel', GetBoolByIndexSrv)
+    buttonOneLightStateRequest = GetBoolByIndexSrvRequest()
+    buttonOneLightStateRequest.index = 0
     buttonOneLightStateResponse = GetBoolByIndexSrvResponse()
 
-    
+    buttonOneLightStateResponse = buttonOneLightStateService.call(
+        buttonOneLightStateRequest
+    )
+    return buttonOneLightStateRequest
+
 
 def main ():
 
@@ -43,6 +49,8 @@ def main ():
         input_data = my_array[0]
         if input_data == True:
             buttonLightOn()
+
+            # out: "index: 0"
             rospy.loginfo(buttonLightState())
 
         
