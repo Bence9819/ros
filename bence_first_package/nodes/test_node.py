@@ -6,6 +6,7 @@ from multiprocessing.sharedctypes import Value
 import rospy
 from faketelen_platform_msgs.srv import SetBoolByIndexSrv, SetBoolByIndexSrvRequest, GetBoolByIndexSrv, GetBoolByIndexSrvRequest,GetBoolByIndexSrvResponse
 from faketelen_platform_msgs.msg import BoolArray, BoolEvent
+import time
  
 def buttonLightOn ():
     buttonOneLightOnService = rospy.ServiceProxy('/module_services/module_1/digital_outputs/set_channel', SetBoolByIndexSrv)
@@ -32,11 +33,10 @@ def buttonLightState ():
     buttonOneLightStateRequest = GetBoolByIndexSrvRequest()
     buttonOneLightStateRequest.index = 0
     buttonOneLightStateResponse = GetBoolByIndexSrvResponse()
-
     buttonOneLightStateResponse = buttonOneLightStateService.call(
         buttonOneLightStateRequest
     )
-    return buttonOneLightStateRequest
+    return buttonOneLightStateResponse
 
 
 def main ():
@@ -47,11 +47,28 @@ def main ():
 
         my_array = msg.values
         input_data = my_array[0]
-        if input_data == True:
-            buttonLightOn()
+        state = buttonLightState().value
+        clicked = False
 
-            # out: "index: 0"
-            rospy.loginfo(buttonLightState())
+        print("input: ", input_data)
+        if input_data:
+            clicked = True
+            print("clicked: ", clicked)
+        
+        if clicked == True & state == False:
+            print("on, clicked: ", clicked, " state:", state)
+            buttonLightOn()
+            clicked = False
+            print("(on)clicked set False: ", clicked)
+            time.sleep(1)
+        elif clicked == True & state == True:
+            print("off, clicked: ", clicked, " state: ", state)
+            buttonLightOff()
+            clicked = False
+            print("(off)clicked set False: ", clicked)
+            time.sleep(1)
+  
+
 
         
  
