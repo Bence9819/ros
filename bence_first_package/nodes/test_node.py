@@ -45,28 +45,16 @@ def main ():
     
     def callback_input_data (msg):
 
+
+
         my_array = msg.values
         input_data = my_array[0]
-        state = buttonLightState().value
-        clicked = False
-
-        print("input: ", input_data)
-        if input_data:
-            clicked = True
-            print("clicked: ", clicked)
-        
-        if clicked == True & state == False:
-            print("on, clicked: ", clicked, " state:", state)
-            buttonLightOn()
-            clicked = False
-            print("(on)clicked set False: ", clicked)
-            time.sleep(1)
-        elif clicked == True & state == True:
-            print("off, clicked: ", clicked, " state: ", state)
-            buttonLightOff()
-            clicked = False
-            print("(off)clicked set False: ", clicked)
-            time.sleep(1)
+        if input_data == True:
+            state = buttonLightState().value
+            if state == False:
+                buttonLightOn()
+            else:
+                buttonLightOff()
   
 
 
